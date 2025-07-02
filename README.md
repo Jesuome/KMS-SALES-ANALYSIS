@@ -55,7 +55,7 @@ EDA involves exploring the order data to answer key questions, such as:
 ### ANALYSIS
 ### SQL Analysis Queries
 
-You can view the full list of the SQL queries 
+You can view the full list of the SQL queries [HERE](SQL/Analysis_Queries)
 
 
 
