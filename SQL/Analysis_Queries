@@ -1,0 +1,212 @@
+-- Using the Existing KMS database for analysis
+USE KMS_DSA_PROJECT_DB
+
+--KULTRA MEGA STORE (KMS) SALES AND ORDER ANALYSIS - SQL Query Archive
+--Contais queries that answer the 11 focus questions
+--Author: Jesuome Ughwudogho.
+
+CREATE DATABASE KMS_DSA_PROJECT_DB
+
+SELECT *FROM [dbo].[KMS Sql Case Study 1]
+
+ALTER TABLE [KMS SqL Case Study 1]
+ADD CONSTRAINT PK_KMS_Order_ID PRIMARY KEY (Order_ID);
+
+SELECT Order_ID, COUNT(*)
+FROM [KMS Sql Case Study 1]
+GROUP BY Order_ID
+HAVING COUNT(*) > 1;
+
+WITH CTE AS (
+	SELECT *,
+			ROW_NUMBER() OVER (PARTITION BY Order_ID ORDER BY (SELECT NULL)) AS RN
+		FROM [KMS Sql Case Study 1]
+)
+DELETE FROM CTE
+WHERE RN > 1;
+
+ALTER TABLE [KMS SqL Case Study 1]
+ADD CONSTRAINT PK_Order_ID PRIMARY KEY (Order_ID);
+
+SELECT *FROM [KMS Sql Case Study 1]
+
+ALTER TABLE [KMS Sql Case Study 1]
+DROP COLUMN Product_Base_Margin
+
+ALTER TABLE [KMS Sql Case Study 1]
+	ALTER COLUMN Profit MONEY;
+
+ALTER TABLE [KMS Sql Case Study 1]
+	ALTER COLUMN Unit_Price MONEY;
+
+ALTER TABLE [KMS Sql Case Study 1]
+	ALTER COLUMN Sales MONEY;
+
+ALTER TABLE [KMS Sql Case Study 1]
+	ALTER COLUMN Shipping_Cost MONEY;
+
+ALTER TABLE [KMS Sql Case Study 1]
+	ALTER COLUMN Discount DECIMAL(5, 2);
+	
+---ANALYSIS--
+--QUESTION 1: PRODUCT CATEGORY WITH THE HIGHEST SALES
+SELECT TOP 1 Product_Category, SUM(SALES) AS TOTAL_SALES
+FROM [KMS Sql Case Study 1]
+GROUP BY Product_Category
+ORDER BY TOTAL_SALES DESC
+
+--QUESTION 2: What are the Top 3 and Bottom 3 regions in terms of sales?
+--TOP 3 REGIONS IN TERMS OF SALES
+SELECT TOP 3 Region, SUM (SALES) AS TOTAL_SALES
+FROM [KMS Sql Case Study 1]
+GROUP BY Region
+ORDER BY TOTAL_SALES DESC
+
+--BOTTOM 3 REGIONS IN TERMS OF SALES-
+SELECT TOP 3 Region, SUM (SALES) AS TOTAL_SALES
+FROM [KMS Sql Case Study 1]
+GROUP BY Region
+ORDER BY TOTAL_SALES ASC
+
+--QUESTION 3: What were the total sales of appliances in Ontario?
+SELECT 
+	Region AS Region,
+	Product_Sub_Category,
+	SUM(SALES) AS TOTAL_SALES
+FROM [KMS Sql Case Study 1]
+WHERE Product_Sub_Category = 'APPLIANCES'
+	AND Region = 'ONTARIO'
+GROUP BY Region, Product_Sub_Category
+
+--QUESTION 4: Advise the management of KMS on what to do to increase the revenue from the bottom 10 customers
+ALTER TABLE [KMS Sql Case Study 1]
+ADD REVENUE MONEY;
+
+UPDATE [KMS Sql Case Study 1]
+SET REVENUE = Unit_Price * Order_Quantity
+
+SELECT TOP 10
+		Order_ID, Customer_Name, Customer_Segment, Region, Product_Category, Product_Sub_Category, Product_Name, Order_Priority, Order_Quantity, Ship_Mode, REVENUE,
+		SUM(Sales) AS TOTAL_REVENUE
+FROM [KMS Sql Case Study 1]
+WHERE REVENUE IS NOT NULL
+GROUP BY Order_ID, Customer_Name, Customer_Segment, Region, Product_Category, Product_Sub_Category, Product_Name, Order_Priority, Order_Quantity, Ship_Mode, REVENUE
+ORDER BY TOTAL_REVENUE ASC
+
+--ADVICE AS A DATA ANALYST TO KMS ON HOW TO INCREASE REVENUE FROM BOTTOM 10 CUSTOMERS
+--Analysis of the bottom 1o customers shows that many placed critical orders but recieved them via Regular Air instead of Express Air, risking delays or damage of product. This may likely contibute to customer dissatisfaction.This customers also just made 1 or 2 order purchase between 2009-2012, this product falls under OFFICE SUPPLIES under product category
+-- which are typically urgent. This low revenue may be linked to poor delivery experiences  and unmet expectations.
+
+--RECOMENDATIONS:
+--1. Allign shipping mode to order priority: use Express Air for critical orders to improve delivery speed and satisfaction
+--2. Improve Customer Experience for Office Supplies category: Review the delivery feedbacks and timelines for office supplies orders and evaluate if delays or damages have affected customer retention
+--3. Re-engage inactive customers: Investigate thier experiences and address delivery concerns
+--4. Automate shipping logic: Allign shipping method with product type and priority. Implement a rule based shipping logic where product category + order priority dictates the most suitable shipping method automatically.
+
+--QUESTION 5: KMS incurred the most shipping cost using which shipping method?
+SELECT TOP 1 
+	Ship_Mode,
+	SUM(Shipping_Cost) AS TOTALCOST		
+FROM [KMS Sql Case Study 1]
+GROUP By Ship_Mode
+ORDER BY TOTALCOST DESC
+
+--CASE SCENARIO
+--QUESTION 6: Who are the most valuable customers, and what products or services do they typically purchase?
+SELECT
+	Customer_Name,
+	Customer_Segment,
+	Product_Category,
+	Product_Sub_Category,
+	Product_Name,
+	SUM(Sales) AS TOTAL_SPENT
+FROM [KMS Sql Case Study 1]
+GROUP BY Customer_Name, Customer_Segment, Product_Category, Product_Sub_Category, Product_Name
+ORDER BY TOTAL_SPENT DESC
+
+----TOP 10 MOST VALUABLE CUSTOMER AND WHAT PRODUCT THEY PUCHASE
+SELECT TOP 10
+	Customer_Name,
+	Customer_Segment,
+	Product_Category,
+	Product_Sub_Category,
+	Product_Name,
+	SUM(Sales) AS TOTAL_SPENT
+FROM [KMS Sql Case Study 1]
+GROUP BY Customer_Name, Customer_Segment, Product_Category, Product_Sub_Category, Product_Name
+ORDER BY TOTAL_SPENT DESC
+
+--QUESTION 7: Which small business customer had the highest sales?
+SELECT TOP 1 
+	Customer_Segment AS Customer_Segment,
+	Customer_Name, 
+	SUM(Sales) AS TOTAL_SALES
+FROM [KMS Sql Case Study 1]
+WHERE Customer_Segment = 'Small Business'
+GROUP BY Customer_Segment, Customer_Name
+ORDER BY TOTAL_SALES DESC
+
+--QUESTION 8: Which Corporate Customer placed the most number of orders in 2009 – 2012?
+SELECT TOP 2
+	Customer_Segment AS Customer_Segment,
+	Customer_Name,
+	COUNT(Order_Quantity) AS TOTAL_ORDERS
+FROM [KMS Sql Case Study 1]
+WHERE Customer_Segment = 'Corporate'
+		AND YEAR(Order_Date) BETWEEN 2009 AND 2012
+GROUP BY Customer_Segment, Customer_Name
+ORDER BY TOTAL_ORDERS DESC
+
+--QUESTION 9: Which consumer customer was the most profitable one?
+SELECT TOP 1
+	Customer_Segment AS Customer_Segment,
+	Customer_Name,
+	SUM(Profit) AS TOTAL_PROFIT
+FROM [KMS Sql Case Study 1]
+WHERE Customer_Segment = 'Consumer'
+GROUP BY Customer_Segment, Customer_Name
+ORDER BY TOTAL_PROFIT DESC
+
+--QUESTION 10: Which customer returned items, and what segment do they belong to?
+SELECT *FROM Order_Status
+
+SELECT [KMS Sql Case Study 1].Order_ID, [KMS Sql Case Study 1].Row_ID, [KMS Sql Case Study 1].Order_Priority,
+	[KMS SqL Case Study 1].Order_Quantity, [KMS SqL Case Study 1].Customer_Name, [KMS SqL Case Study 1].Customer_Segment, [KMS SqL Case Study 1].Product_Category, 
+	[KMS SqL Case Study 1].Product_Sub_Category,[KMS SqL Case Study 1].Product_Name, Order_Status.Status
+FROM [KMS Sql Case Study 1]
+JOIN Order_Status
+ON Order_Status.Order_ID = [KMS Sql Case Study 1].Order_ID
+
+SELECT TOP 20 [KMS Sql Case Study 1].Order_ID, [KMS Sql Case Study 1].Row_ID, [KMS Sql Case Study 1].Order_Priority,
+	[KMS SqL Case Study 1].Order_Quantity, [KMS SqL Case Study 1].Customer_Name, [KMS SqL Case Study 1].Customer_Segment, [KMS SqL Case Study 1].Product_Category, 
+	[KMS SqL Case Study 1].Product_Sub_Category,[KMS SqL Case Study 1].Product_Name, Order_Status.Status
+FROM [KMS Sql Case Study 1]
+JOIN Order_Status
+ON Order_Status.Order_ID = [KMS Sql Case Study 1].Order_ID
+ORDER BY Order_Quantity desc
+
+
+--QUESTION 11: If the delivery truck is the most economical but the slowest shipping method and Express Air is the fastest but the most expensive one, do you think the company appropriately spent shipping costs based on the Order Priority?
+SELECT 
+	Order_Priority,
+	Ship_Mode, 
+	COUNT(Order_ID) AS NUMBERS_OF_ORDERS,
+	SUM(Shipping_Cost) AS TOTAL_SHIPPINGCOST,
+	SUM(Sales - Profit) AS ESTIMATED_SHIPPING_COST,
+	AVG(DATEDIFF(DAY, Order_Date, Ship_Date)) AS AVG_SHIP_DAYS 
+FROM [KMS Sql Case Study 1]
+GROUP BY Order_Priority, Ship_Mode
+ORDER BY Order_Priority, Ship_Mode DESC
+
+---REPORT
+--The Company is not spending Apropraitely based on shipping cost with order priority.
+--1. critical goods should be sent with Express air. Using delivery truck or regular air to deliver the good under critical priority is at risk for late deliveries and damage which could cause customer dissatisfaction and refrain them from purchasing again. Saving on cost at the expense of service quality.
+--2. the goods under low priority should be delivered through delivery truck, but from the data it is mostly delivered by regular air which can be seen as overspending, no cost effectiveness.KMS should use delivery truck to deliver low priority good so as to minimize shipping cost for non urgent deliveries
+
+ --RECOMMENDATION
+ -- Use express air for critical and some high priority orders
+ --Use regular air for high priority orders
+ -- Use delivery truck for low priority orders
+ --this will help the company spend appropraitely on shipping cost base on order priority.
+ 
+ 
