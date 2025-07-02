@@ -21,7 +21,7 @@ Sales Data: the primary dataset used for this analysis is the "KMS_case_study_Ex
 
 ### TOOL
 
- - SQL Server [Download here](https://SQLServer.com)
+ - SQL Server [Download Here](https://learn.microsoft.com/en-us/ssms/install/install)
     - Data Cleaning and Data Prepocessing
     - Data Analysis
     - Reports
