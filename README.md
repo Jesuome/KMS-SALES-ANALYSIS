@@ -69,6 +69,8 @@ GROUP BY Product_Category
 ORDER BY TOTAL_SALES DESC
 ```
 
+![dashboard1](https://github.com/user-attachments/assets/9bb332c4-2c33-46ab-82c0-61e5b3e8fb0d)
+
 
 **Insight: Top Performing Product Category**
 
@@ -93,6 +95,8 @@ FROM [KMS Sql Case Study 1]
 GROUP BY Region
 ORDER BY TOTAL_SALES ASC
 ```
+
+![Dashboard2](https://github.com/user-attachments/assets/4fd85628-606f-4d62-8923-7e52ff49ab68)
 
 
 **Insight: Regional Sales Performance**
@@ -123,6 +127,7 @@ WHERE Product_Sub_Category = 'APPLIANCES'
 GROUP BY Region, Product_Sub_Category
 ```
 
+![Dashboard3](https://github.com/user-attachments/assets/6c9e02c6-1950-4e15-a280-643d38e9458a)
 
 **Insights**: SQL Analysis indicates that Appliances generated a total sales value of ₦187,490.6199 in Ontario region
 
@@ -144,6 +149,8 @@ WHERE REVENUE IS NOT NULL
 GROUP BY Order_ID, Customer_Name, Customer_Segment, Region, Product_Category, Product_Sub_Category, Product_Name, Order_Priority, Order_Quantity, Ship_Mode, REVENUE
 ORDER BY TOTAL_REVENUE ASC
 ```
+
+![Dashboard5](https://github.com/user-attachments/assets/8ba82841-f942-42a4-8aa4-0204ec926191)
 
 **Insight from Bottom 10 Customers Analysis**
 
@@ -172,6 +179,8 @@ GROUP By Ship_Mode
 ORDER BY TOTALCOST DESC
 ```
 
+![Dashboard6](https://github.com/user-attachments/assets/a50f19d9-759e-4829-915f-7396f161c44e)
+
 **Insight: Highest Shipping Cost by Ship Mode**
 
 KMS incurred the highest total shipping cost of ₦33,937.92 using the  Delivery Truck shipping method.
@@ -197,6 +206,8 @@ FROM [KMS Sql Case Study 1]
 GROUP BY Customer_Name, Customer_Segment, Product_Category, Product_Sub_Category, Product_Name
 ORDER BY TOTAL_SPENT DESC
 ```
+
+![Dashboard7](https://github.com/user-attachments/assets/14445ab4-b45b-4bc7-8b43-e642ca98745d)
 
 **Insight: Top 10 Most Valuable Customers and Their Preferred Products**
 
@@ -237,6 +248,8 @@ GROUP BY Customer_Segment, Customer_Name
 ORDER BY TOTAL_SALES DESC
 ```
 
+![Dashboard9](https://github.com/user-attachments/assets/5f44bcdf-12ea-4559-a2c2-c3d23ceffabf)
+
 **Insight: Top Customer in Small Business Segment**
 
 Based on the analysis, Clytie Kelty is the highest-value customer in the Small Business segment, with a total sales value of ₦50,664.20.
@@ -257,6 +270,8 @@ WHERE Customer_Segment = 'Corporate'
 GROUP BY Customer_Segment, Customer_Name
 ORDER BY TOTAL_ORDERS DESC
 ```
+
+![Dashboard10](https://github.com/user-attachments/assets/57563d3d-8d3e-4053-abbf-43117022741a)
 
 **Insight: Top Corporate Customers by Order Volume (2009–2012)**
 
@@ -279,6 +294,8 @@ WHERE Customer_Segment = 'Consumer'
 GROUP BY Customer_Segment, Customer_Name
 ORDER BY TOTAL_PROFIT DESC
 ```
+
+![Dashboard11](https://github.com/user-attachments/assets/3f2ab8c1-0dcb-4811-8430-3c45ba0cc403)
 
 **Insight: Most Profitable Customer in the Consumer Segment**
 
@@ -308,6 +325,8 @@ ON Order_Status.Order_ID = [KMS Sql Case Study 1].Order_ID
 ORDER BY Order_Quantity desc
 ```
 
+![Dashboard12](https://github.com/user-attachments/assets/5074b668-c1df-4f43-b110-2a7bd8b3430e)
+
 **Insight**:
 
 A total of 572 customers returned items. This cut across various segments, including Consumer, Home Office, Corporate, and Small Business.
@@ -330,6 +349,8 @@ FROM [KMS Sql Case Study 1]
 GROUP BY Order_Priority, Ship_Mode
 ORDER BY Order_Priority, Ship_Mode DESC
 ```
+
+![Dashboard13](https://github.com/user-attachments/assets/6d1be498-40bb-4464-a621-c79539e05515)
 
 **Report**: KMS did not spend appropriately on shipping based on order priority
  
