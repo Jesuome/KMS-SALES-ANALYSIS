@@ -68,7 +68,7 @@ FROM [KMS Sql Case Study 1]
 GROUP BY Product_Category
 ORDER BY TOTAL_SALES DESC
 ```
-[here](Dashboard10.png)
+
 ![dashboard1](https://github.com/user-attachments/assets/9bb332c4-2c33-46ab-82c0-61e5b3e8fb0d)
 
 
