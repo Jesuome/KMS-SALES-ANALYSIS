@@ -69,7 +69,6 @@ GROUP BY Product_Category
 ORDER BY TOTAL_SALES DESC
 ```
 
-![dashboard1](https://github.com/user-attachments/assets/612d2928-3b24-42d2-a2e1-9e684db733e8)
 
 **Insight: Top Performing Product Category**
 
@@ -95,7 +94,6 @@ GROUP BY Region
 ORDER BY TOTAL_SALES ASC
 ```
 
-![Dashboard2](https://github.com/user-attachments/assets/ae32b20e-458b-42f0-af8d-d70185cbb2c2)
 
 **Insight: Regional Sales Performance**
 
@@ -125,7 +123,6 @@ WHERE Product_Sub_Category = 'APPLIANCES'
 GROUP BY Region, Product_Sub_Category
 ```
 
-![Dashboard3](https://github.com/user-attachments/assets/1786f32a-abbc-4579-98d8-5e7a725219fd)
 
 **Insights**: SQL Analysis indicates that Appliances generated a total sales value of ₦187,490.6199 in Ontario region
 
